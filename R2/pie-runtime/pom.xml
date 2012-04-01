@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>
-		com.pieframework
-	</groupId>
+	<groupId>com.pieframework</groupId>
 	<artifactId>pie-runtime</artifactId>
 	<name>pie-runtime</name>
 	<version>2.0.0-SNAPSHOT</version>
@@ -14,5 +12,110 @@
 			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+		</dependency>
+		<dependency>
+			<groupId>args4j</groupId>
+			<artifactId>args4j</artifactId>
+			<version>2.0.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ni.lvcloud.azure</groupId>
+			<artifactId>azure-client</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcmail-jdk16</artifactId>
+			<version>1.46</version>
+			<scope>system</scope>
+			<systemPath>C:\pie2\lib\bcmail-jdk16-146.jar
+			</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>1.46</version>
+			<scope>system</scope>
+			<systemPath>C:\pie2\lib\bcprov-jdk16-146.jar
+			</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.perforce</groupId>
+			<artifactId>p4java</artifactId>
+			<version>2011.1</version>
+			<scope>system</scope>
+			<systemPath>c:\pie2\lib\p4java-2011.1.297684.jar
+			</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.pieframework</groupId>
+			<artifactId>pie-model</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<finalName>pie</finalName>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<manifestEntries>
+										<Main-Class>com.pieframework.runtime.core.run</Main-Class>
+										<Version>${project.version}</Version>
+										<Build-Date>${buildtimestamp}</Build-Date>
+									</manifestEntries>
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		<plugin>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
+            <executions>
+               <execution>
+                  <phase>validate</phase>
+                  <goals>
+                     <goal>execute</goal>
+                  </goals>
+                  <configuration>
+                     <source>
+                     import java.util.Date 
+                     import java.text.MessageFormat 
+                     def vartimestamp = MessageFormat.format("{0,date,yyyyMMdd-HHmmss}", new Date()) 
+                     project.properties['buildtimestamp'] = vartimestamp
+                     </source>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+		</plugins>
+	</build>
 </project>
